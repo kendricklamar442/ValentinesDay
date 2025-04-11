@@ -7,20 +7,17 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Apply Inter font by default, Dancing Script for the poem */
+        /* Apply Inter font by default */
         body {
             font-family: 'Inter', sans-serif;
-            /* Ensure body takes full height and hides overflow for particles */
             min-height: 100vh;
-            position: relative; /* Needed for absolute positioning of particles */
-            overflow: hidden; /* Hide overflow to prevent scrollbars from particles */
-            background-color: #000; /* Ensure black background */
+            position: relative;
+            overflow: hidden;
+            background-color: #000;
         }
-        .poem-text {
-            font-family: 'Dancing Script', cursive;
-        }
+        /* Removed .poem-text rule to use default Inter font */
 
         /* --- Heart Particle Animation --- */
         .particle-container {
@@ -29,96 +26,74 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allow clicks to pass through */
-            z-index: 0; /* Behind the main content */
+            pointer-events: none;
+            z-index: 0;
         }
-
         .heart-particle {
             position: absolute;
-            /* Use CSS variable for scaling */
             --scale-factor: 1;
             width: calc(15px * var(--scale-factor));
             height: calc(15px * var(--scale-factor));
-            background-color: #ec4899; /* Pink color */
-            border-radius: 50% 50% 0 0; /* Top curves */
+            background-color: #ec4899;
+            border-radius: 50% 50% 0 0;
             transform: rotate(-45deg);
             animation: floatUp 10s infinite linear;
-            opacity: 0; /* Start invisible */
+            opacity: 0;
         }
-
-        /* Create the heart shape using pseudo-elements */
         .heart-particle::before,
         .heart-particle::after {
             content: '';
             position: absolute;
-            /* Scale pseudo-elements based on parent's scale factor */
             width: calc(15px * var(--scale-factor));
             height: calc(15px * var(--scale-factor));
-            background-color: #ec4899; /* Pink color */
+            background-color: #ec4899;
             border-radius: 50%;
         }
-
         .heart-particle::before {
-             /* Adjust position based on scaled size */
             top: calc(-7.5px * var(--scale-factor));
             left: 0;
         }
-
         .heart-particle::after {
-             /* Adjust position based on scaled size */
             top: 0;
             left: calc(7.5px * var(--scale-factor));
         }
-
-        /* Keyframes for floating up animation */
         @keyframes floatUp {
-            0% {
-                transform: translateY(100vh) rotate(-45deg);
-                opacity: 0;
-            }
-            10%, 90% {
-                opacity: 0.8; /* Fade in and stay visible */
-            }
-            100% {
-                transform: translateY(-10vh) rotate(-45deg);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+            10%, 90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(-45deg); opacity: 0; }
         }
 
-        /* --- Static Heart Beat Animation (for corner icon) --- */
+        /* --- Static Heart Beat Animation --- */
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            50% { transform: scale(1.15); } /* Slightly bigger beat */
+            50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
         .heart-icon {
             animation: heartbeat 1.5s ease-in-out infinite;
             display: inline-block;
         }
-
     </style>
 </head>
 <body class="bg-black min-h-screen flex items-center justify-center p-4 md:p-6 relative">
-    <div class="particle-container" id="particle-container">
-        </div>
+    <div class="particle-container" id="particle-container"></div>
 
     <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh]">
 
-        <div class="md:w-1/2 relative group h-64 md:h-auto">
+        <div class="md:w-3/5 relative group h-64 md:h-80">
             <img src="image.png" alt="Image for the person the poem is for"
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/831843/e5e7eb?text=Image+Not+Found';"
-                 class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/831843/e5e7eb?text=Image+Not+Found';" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
             <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
         </div>
 
-        <div class="md:w-1/2 p-6 md:p-10 flex flex-col justify-center relative overflow-y-auto">
+        <div class="md:w-2/5 p-6 md:p-10 flex flex-col justify-center relative overflow-y-auto md:flex-grow">
             <div class="absolute top-4 right-4 text-pink-500 text-3xl heart-icon">
                 ❤️
             </div>
 
             <h1 class="text-3xl md:text-4xl font-bold text-pink-300 mb-4 text-center md:text-left">To My Dearest</h1>
 
-            <div class="poem-text text-xl md:text-2xl text-gray-300 leading-relaxed space-y-4">
+            <div class="text-lg md:text-xl text-gray-100 leading-relaxed space-y-4">
                 <p>
                     Azemar, lord of vector, sum, and line,<br>
                     Whose handsome angles flawlessly align.<br>
@@ -139,7 +114,8 @@
                 <p class="text-right mt-6 text-lg text-pink-400">
                     With all my love,
                     <br>
-                    (Your Name) </p>
+                    (Your Name)
+                </p>
             </div>
 
             <div class="text-center mt-8 text-pink-600 text-sm">
@@ -149,28 +125,18 @@
     </div>
 
     <script>
-        // JavaScript to create and animate heart particles
         const particleContainer = document.getElementById('particle-container');
-        const numberOfParticles = 30; // Adjust number of hearts
-
+        const numberOfParticles = 30;
         for (let i = 0; i < numberOfParticles; i++) {
             const particle = document.createElement('div');
             particle.classList.add('heart-particle');
-
-            // Randomize starting horizontal position
             particle.style.left = `${Math.random() * 100}%`;
-
-            // Randomize animation delay and duration for variety
-            const duration = Math.random() * 5 + 8; // Duration between 8s and 13s
-            const delay = Math.random() * 10; // Delay up to 10s
-
+            const duration = Math.random() * 5 + 8;
+            const delay = Math.random() * 10;
             particle.style.animationDuration = `${duration}s`;
             particle.style.animationDelay = `${delay}s`;
-
-            // Randomize size slightly using CSS variable
-            const scale = Math.random() * 0.5 + 0.7; // Scale between 0.7 and 1.2
+            const scale = Math.random() * 0.5 + 0.7;
             particle.style.setProperty('--scale-factor', scale);
-
             particleContainer.appendChild(particle);
         }
     </script>
