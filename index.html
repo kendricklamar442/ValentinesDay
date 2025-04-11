@@ -15,7 +15,7 @@
             min-height: 100vh;
             position: relative;
             overflow: hidden; /* Keep overflow hidden for particles */
-            background-color: #000;
+            background-color: #000; /* Dark background */
         }
 
         /* --- Heart Particle Animation --- */
@@ -25,52 +25,54 @@
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none;
-            z-index: 0;
+            pointer-events: none; /* Particles don't interfere with interaction */
+            z-index: 0; /* Behind the main content */
         }
         .heart-particle {
             position: absolute;
             --scale-factor: 1; /* Base scale factor for individual hearts */
             width: calc(15px * var(--scale-factor));
             height: calc(15px * var(--scale-factor));
-            background-color: #ec4899;
-            border-radius: 50% 50% 0 0;
-            transform: rotate(-45deg);
-            animation: floatUp 10s infinite linear;
-            opacity: 0;
+            background-color: #ec4899; /* Pink color for hearts */
+            border-radius: 50% 50% 0 0; /* Top curves of the heart */
+            transform: rotate(-45deg); /* Rotate to form heart shape */
+            animation: floatUp 10s infinite linear; /* Floating animation */
+            opacity: 0; /* Start invisible */
         }
+        /* Using pseudo-elements to complete the heart shape */
         .heart-particle::before,
         .heart-particle::after {
             content: '';
             position: absolute;
             width: calc(15px * var(--scale-factor));
             height: calc(15px * var(--scale-factor));
-            background-color: #ec4899;
-            border-radius: 50%;
+            background-color: #ec4899; /* Match heart color */
+            border-radius: 50%; /* Circular shape for lobes */
         }
         .heart-particle::before {
-            top: calc(-7.5px * var(--scale-factor));
+            top: calc(-7.5px * var(--scale-factor)); /* Position left lobe */
             left: 0;
         }
         .heart-particle::after {
             top: 0;
-            left: calc(7.5px * var(--scale-factor));
+            left: calc(7.5px * var(--scale-factor)); /* Position right lobe */
         }
+        /* Keyframes for the floating heart animation */
         @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
-            10%, 90% { opacity: 0.8; }
-            100% { transform: translateY(-10vh) rotate(-45deg); opacity: 0; }
+            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; } /* Start at bottom, invisible */
+            10%, 90% { opacity: 0.8; } /* Fade in and stay visible */
+            100% { transform: translateY(-10vh) rotate(-45deg); opacity: 0; } /* Float off the top, fade out */
         }
 
-        /* --- Static Heart Beat Animation --- */
+        /* --- Static Heart Beat Animation (for the emoji heart) --- */
         @keyframes heartbeat {
             0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
+            50% { transform: scale(1.15); } /* Pulse bigger */
+            100% { transform: scale(1); } /* Return to normal size */
         }
         .heart-icon {
-            animation: heartbeat 1.5s ease-in-out infinite;
-            display: inline-block;
+            animation: heartbeat 1.5s ease-in-out infinite; /* Apply heartbeat animation */
+            display: inline-block; /* Needed for transform */
         }
     </style>
 </head>
@@ -80,7 +82,7 @@
     <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh] scale-90 origin-center">
 
         <div class="md:w-3/5 relative group h-64 md:h-80">
-            <img src="image.png" alt="Image for the person the poem is for"
+             <img src="image_95bf92.jpg" alt="Image for the person the poem is for"
                  onerror="this.onerror=null; this.src='https://placehold.co/600x400/831843/e5e7eb?text=Image+Not+Found';"
                  class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
             <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
@@ -125,19 +127,24 @@
     </div>
 
     <script>
+        // JavaScript to create and animate floating heart particles
         const particleContainer = document.getElementById('particle-container');
-        const numberOfParticles = 30;
+        const numberOfParticles = 30; // Number of hearts to generate
+
         for (let i = 0; i < numberOfParticles; i++) {
             const particle = document.createElement('div');
             particle.classList.add('heart-particle');
+            // Random horizontal position
             particle.style.left = `${Math.random() * 100}%`;
-            const duration = Math.random() * 5 + 8;
-            const delay = Math.random() * 10;
+            // Random animation duration and delay for variety
+            const duration = Math.random() * 5 + 8; // Duration between 8s and 13s
+            const delay = Math.random() * 10; // Delay up to 10s
             particle.style.animationDuration = `${duration}s`;
             particle.style.animationDelay = `${delay}s`;
-            const scale = Math.random() * 0.5 + 0.7;
-            particle.style.setProperty('--scale-factor', scale);
-            particleContainer.appendChild(particle);
+            // Random size for hearts
+            const scale = Math.random() * 0.5 + 0.7; // Scale between 0.7 and 1.2
+            particle.style.setProperty('--scale-factor', scale); // Set CSS variable for size
+            particleContainer.appendChild(particle); // Add the particle to the container
         }
     </script>
 
