@@ -14,10 +14,9 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* Keep overflow hidden for particles */
             background-color: #000;
         }
-        /* Removed .poem-text rule to use default Inter font */
 
         /* --- Heart Particle Animation --- */
         .particle-container {
@@ -31,7 +30,7 @@
         }
         .heart-particle {
             position: absolute;
-            --scale-factor: 1;
+            --scale-factor: 1; /* Base scale factor for individual hearts */
             width: calc(15px * var(--scale-factor));
             height: calc(15px * var(--scale-factor));
             background-color: #ec4899;
@@ -78,11 +77,12 @@
 <body class="bg-black min-h-screen flex items-center justify-center p-4 md:p-6 relative">
     <div class="particle-container" id="particle-container"></div>
 
-    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh]">
+    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh] scale-90 origin-center">
 
         <div class="md:w-3/5 relative group h-64 md:h-80">
             <img src="image.png" alt="Image for the person the poem is for"
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/831843/e5e7eb?text=Image+Not+Found';" class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/831843/e5e7eb?text=Image+Not+Found';"
+                 class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
             <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
         </div>
 
