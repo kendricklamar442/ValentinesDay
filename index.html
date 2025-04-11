@@ -11,9 +11,14 @@
         body {
             font-family: 'Inter', sans-serif; /* Tailwind default font */
             background: linear-gradient(135deg, #fff1f2, #ffe4e6); /* Soft pink gradient */
-            overflow: hidden; /* Hide scrollbars caused by particles */
+            /* removed overflow: hidden; */
             position: relative; /* Needed for absolute positioning of particles */
             min-height: 100vh;
+            /* Ensure flex container takes full height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem; /* Replaced p-6 class with explicit padding */
         }
         .poem-container {
             background-color: rgba(255, 255, 255, 0.85); /* Slightly less transparent white background */
@@ -23,7 +28,19 @@
             z-index: 10;
             /* Subtle glow effect */
             box-shadow: 0 0 25px rgba(255, 105, 180, 0.4); /* Pink glow */
+            /* Added vertical scroll and max height */
+            overflow-y: auto; /* Allow vertical scroll if content overflows */
+            max-height: 90vh; /* Max height relative to viewport height */
+            /* Ensure padding is applied correctly */
+            padding: 2rem; /* Default padding (p-8) */
         }
+        /* Apply larger padding on medium screens and up */
+        @media (min-width: 768px) {
+            .poem-container {
+                padding: 3rem; /* md:p-12 */
+            }
+        }
+
         .heart-icon {
             color: #f43f5e; /* Rose color for heart */
             /* Subtle text glow for the main heart */
@@ -45,7 +62,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
+            overflow: hidden; /* Keep particles contained */
             z-index: 1; /* Behind the poem container */
             pointer-events: none; /* Allow clicks to pass through */
         }
@@ -72,28 +89,29 @@
                 opacity: 0.7; /* Fade in and stay visible */
             }
             100% {
-                transform: translateY(-100vh) translateX(var(--drift, 0px)) rotate(360deg); /* Float up and slightly drift */
+                transform: translateY(-110vh) translateX(var(--drift, 0px)) rotate(360deg); /* Float further up to ensure they leave screen */
                 opacity: 0; /* Fade out at the top */
             }
         }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body>
 
     <div class="particle-container" id="particle-container"></div>
 
-    <div class="poem-container max-w-2xl w-full p-8 md:p-12 rounded-lg shadow-lg text-center">
-        <div class="mb-6"> <i class="fas fa-heart heart-icon text-4xl mb-4"></i>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
+    <div class="poem-container max-w-2xl w-full rounded-lg shadow-lg text-center">
+        <div class="mb-6">
+             <i class="fas fa-heart heart-icon text-4xl mb-4 inline-block"></i> <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
             <p class="text-lg text-gray-600 mt-2">A Valentine's Poem</p>
         </div>
 
-        <div class="mb-8"> <img
+        <div class="mb-8">
+            <img
                 src="image.png"
                 alt="Valentine Image for Azemar"
                 class="mx-auto w-1/2 max-w-xs rounded-lg border-2 border-pink-300 shadow-md object-cover aspect-square"
                 onerror="this.onerror=null; this.src='https://placehold.co/300x300/ffe4e6/f43f5e?text=Azemar'; this.classList.add('bg-pink-100');"
-                />
+            />
         </div>
 
         <div class="text-left text-gray-700 leading-relaxed space-y-4">
@@ -156,16 +174,16 @@
             particleContainer.appendChild(particle);
 
             // Remove particle from DOM after animation finishes to prevent buildup
+             // And create a new one to maintain density
             particle.addEventListener('animationend', () => {
                 particle.remove();
-                // Create a new particle to replace the one that finished
-                createParticle();
+                createParticle(); // Create a new one when one finishes
             });
         }
 
         // Create initial set of particles, staggered
         for (let i = 0; i < numberOfParticles; i++) {
-            setTimeout(createParticle, Math.random() * 5000);
+            setTimeout(createParticle, Math.random() * 5000); // Stagger initial creation
         }
     </script>
 
