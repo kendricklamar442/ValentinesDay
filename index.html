@@ -12,7 +12,7 @@
         /* Apply Inter font by default, Dancing Script for the poem */
         body {
             font-family: 'Inter', sans-serif;
-            /* Ensure body takes full height for particle container */
+            /* Ensure body takes full height and hides overflow for particles */
             min-height: 100vh;
             position: relative; /* Needed for absolute positioning of particles */
             overflow: hidden; /* Hide overflow to prevent scrollbars from particles */
@@ -35,17 +35,15 @@
 
         .heart-particle {
             position: absolute;
-            width: 15px; /* Size of hearts */
-            height: 15px;
+            /* Use CSS variable for scaling */
+            --scale-factor: 1;
+            width: calc(15px * var(--scale-factor));
+            height: calc(15px * var(--scale-factor));
             background-color: #ec4899; /* Pink color */
             border-radius: 50% 50% 0 0; /* Top curves */
             transform: rotate(-45deg);
             animation: floatUp 10s infinite linear;
             opacity: 0; /* Start invisible */
-            /* Use CSS variable for scaling */
-            --scale-factor: 1;
-            width: calc(15px * var(--scale-factor));
-            height: calc(15px * var(--scale-factor));
         }
 
         /* Create the heart shape using pseudo-elements */
@@ -100,51 +98,51 @@
 
     </style>
 </head>
-<body class="bg-black min-h-screen flex items-center justify-center p-6 relative">
-
+<body class="bg-black min-h-screen flex items-center justify-center p-4 md:p-6 relative">
     <div class="particle-container" id="particle-container">
         </div>
 
-    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative">
-        <div class="md:w-1/2 relative group">
-            <img src="image.png"
-                 alt="Image for the person the poem is for"
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/831843/e5e7eb?text=image.png+not+found';"
+    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh]">
+
+        <div class="md:w-1/2 relative group h-64 md:h-auto">
+            <img src="image.png" alt="Image for the person the poem is for"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/831843/e5e7eb?text=Image+Not+Found';"
                  class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
-             <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+            <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
         </div>
 
-        <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative">
-             <div class="absolute top-4 right-4 text-pink-500 text-3xl heart-icon">
+        <div class="md:w-1/2 p-6 md:p-10 flex flex-col justify-center relative overflow-y-auto">
+            <div class="absolute top-4 right-4 text-pink-500 text-3xl heart-icon">
                 ❤️
             </div>
 
             <h1 class="text-3xl md:text-4xl font-bold text-pink-300 mb-4 text-center md:text-left">To My Dearest</h1>
+
             <div class="poem-text text-xl md:text-2xl text-gray-300 leading-relaxed space-y-4">
                 <p>
-        Azemar, lord of vector, sum, and line,<br>
-        Whose handsome angles flawlessly align.<br>
-        With warm brown skin, a smile that lights the space,<br>
-        Though student droning dims that tailored grace.<br><br>
-        Ten thousand floor plans, burdens he assigns,<br>
-        Ignoring chatter from resentful minds.<br>
-        He loves the <em>program</em> – clean, precise, and vast,<br>
-        Unlike the futures these dull learners cast.<br><br>
-        He renders structures, calculates the fee,<br>
-        While hopeful homework waits eternally.<br>
-        His focus fixed on AutoCAD's cold gleam,<br>
-        A digital, student-less, perfect dream.<br><br>
-        Oh, Azemar, sharp mind, aesthetic treat,<br>
-        Make <em>my</em> heart's layout finally complete—<br>
-        Be my design, my chosen Valentine?
-    </p>
-    <p class="text-right mt-6 text-lg text-pink-400">
-        With all my love,
-        <br>
-        (Your Name)
-    </p>
-</div>
-             <div class="text-center mt-8 text-pink-600 text-sm">
+                    Azemar, lord of vector, sum, and line,<br>
+                    Whose handsome angles flawlessly align.<br>
+                    With warm brown skin, a smile that lights the space,<br>
+                    Though student droning dims that tailored grace.<br><br>
+                    Ten thousand floor plans, burdens he assigns,<br>
+                    Ignoring chatter from resentful minds.<br>
+                    He loves the <em>program</em> – clean, precise, and vast,<br>
+                    Unlike the futures these dull learners cast.<br><br>
+                    He renders structures, calculates the fee,<br>
+                    While hopeful homework waits eternally.<br>
+                    His focus fixed on AutoCAD's cold gleam,<br>
+                    A digital, student-less, perfect dream.<br><br>
+                    Oh, Azemar, sharp mind, aesthetic treat,<br>
+                    Make <em>my</em> heart's layout finally complete—<br>
+                    Be my design, my chosen Valentine?
+                </p>
+                <p class="text-right mt-6 text-lg text-pink-400">
+                    With all my love,
+                    <br>
+                    (Your Name) </p>
+            </div>
+
+            <div class="text-center mt-8 text-pink-600 text-sm">
                 ♡ ♡ ♡
             </div>
         </div>
