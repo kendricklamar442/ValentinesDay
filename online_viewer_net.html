@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Poem For You - Valentine's Night</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font by default, Dancing Script for the poem */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Ensure body takes full height for particle container */
+            min-height: 100vh;
+            position: relative; /* Needed for absolute positioning of particles */
+            overflow: hidden; /* Hide overflow to prevent scrollbars from particles */
+            background-color: #000; /* Ensure black background */
+        }
+        .poem-text {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        /* --- Heart Particle Animation --- */
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allow clicks to pass through */
+            z-index: 0; /* Behind the main content */
+        }
+
+        .heart-particle {
+            position: absolute;
+            width: 15px; /* Size of hearts */
+            height: 15px;
+            background-color: #ec4899; /* Pink color */
+            border-radius: 50% 50% 0 0; /* Top curves */
+            transform: rotate(-45deg);
+            animation: floatUp 10s infinite linear;
+            opacity: 0; /* Start invisible */
+            /* Use CSS variable for scaling */
+            --scale-factor: 1;
+            width: calc(15px * var(--scale-factor));
+            height: calc(15px * var(--scale-factor));
+        }
+
+        /* Create the heart shape using pseudo-elements */
+        .heart-particle::before,
+        .heart-particle::after {
+            content: '';
+            position: absolute;
+            /* Scale pseudo-elements based on parent's scale factor */
+            width: calc(15px * var(--scale-factor));
+            height: calc(15px * var(--scale-factor));
+            background-color: #ec4899; /* Pink color */
+            border-radius: 50%;
+        }
+
+        .heart-particle::before {
+             /* Adjust position based on scaled size */
+            top: calc(-7.5px * var(--scale-factor));
+            left: 0;
+        }
+
+        .heart-particle::after {
+             /* Adjust position based on scaled size */
+            top: 0;
+            left: calc(7.5px * var(--scale-factor));
+        }
+
+        /* Keyframes for floating up animation */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(-45deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.8; /* Fade in and stay visible */
+            }
+            100% {
+                transform: translateY(-10vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* --- Static Heart Beat Animation (for corner icon) --- */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); } /* Slightly bigger beat */
+            100% { transform: scale(1); }
+        }
+        .heart-icon {
+            animation: heartbeat 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body class="bg-black min-h-screen flex items-center justify-center p-6 relative">
+
+    <div class="particle-container" id="particle-container">
+        </div>
+
+    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative">
+        <div class="md:w-1/2 relative group">
+            <img src="image.png"
+                 alt="Image for the person the poem is for"
+                 onerror="this.onerror=null; this.src='https://placehold.co/600x800/831843/e5e7eb?text=image.png+not+found';"
+                 class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
+             <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+        </div>
+
+        <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative">
+             <div class="absolute top-4 right-4 text-pink-500 text-3xl heart-icon">
+                ❤️
+            </div>
+
+            <h1 class="text-3xl md:text-4xl font-bold text-pink-300 mb-4 text-center md:text-left">To My Dearest</h1>
+            <div class="poem-text text-xl md:text-2xl text-gray-300 leading-relaxed space-y-4">
+                <p>
+                    (Your beautiful poem will go here...)
+                </p>
+                <p>
+                    Replace this placeholder text with the words that express your feelings. Let them flow like a gentle stream, carrying the depth of your affection.
+                </p>
+                <p>
+                    Each line a brushstroke, painting a picture of your heart.
+                </p>
+                 <p class="text-right mt-6 text-lg text-pink-400">
+                    With all my love,
+                    <br>
+                    (Your Name)
+                </p>
+            </div>
+             <div class="text-center mt-8 text-pink-600 text-sm">
+                ♡ ♡ ♡
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to create and animate heart particles
+        const particleContainer = document.getElementById('particle-container');
+        const numberOfParticles = 30; // Adjust number of hearts
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('heart-particle');
+
+            // Randomize starting horizontal position
+            particle.style.left = `${Math.random() * 100}%`;
+
+            // Randomize animation delay and duration for variety
+            const duration = Math.random() * 5 + 8; // Duration between 8s and 13s
+            const delay = Math.random() * 10; // Delay up to 10s
+
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+
+            // Randomize size slightly using CSS variable
+            const scale = Math.random() * 0.5 + 0.7; // Scale between 0.7 and 1.2
+            particle.style.setProperty('--scale-factor', scale);
+
+            particleContainer.appendChild(particle);
+        }
+    </script>
+
+</body>
+</html>
