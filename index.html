@@ -3,148 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Poem For You - Valentine's Night</title>
+    <title>A Valentine for Azemar</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Apply Inter font by default */
+        /* Custom styles for Valentine's theme */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Tailwind default font */
+            background: linear-gradient(135deg, #fff1f2, #ffe4e6); /* Soft pink gradient */
+            overflow: hidden; /* Hide scrollbars caused by particles */
+            position: relative; /* Needed for absolute positioning of particles */
             min-height: 100vh;
-            position: relative;
-            overflow: hidden; /* Keep overflow hidden for particles */
-            background-color: #000; /* Dark background */
+        }
+        .poem-container {
+            background-color: rgba(255, 255, 255, 0.85); /* Slightly less transparent white background */
+            backdrop-filter: blur(10px); /* Blur effect for the background */
+            border: 1px solid rgba(255, 192, 203, 0.5); /* Light pink border */
+            position: relative; /* Ensure it's above the particles */
+            z-index: 10;
+            /* Subtle glow effect */
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.4); /* Pink glow */
+        }
+        .heart-icon {
+            color: #f43f5e; /* Rose color for heart */
+            /* Subtle text glow for the main heart */
+            filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.5));
+        }
+        /* Add subtle animation to the main heart */
+        .heart-icon:hover {
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
-        /* --- Heart Particle Animation --- */
+        /* Styles for floating heart particles */
         .particle-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Particles don't interfere with interaction */
-            z-index: 0; /* Behind the main content */
+            overflow: hidden;
+            z-index: 1; /* Behind the poem container */
+            pointer-events: none; /* Allow clicks to pass through */
         }
         .heart-particle {
             position: absolute;
-            --scale-factor: 1; /* Base scale factor for individual hearts */
-            width: calc(15px * var(--scale-factor));
-            height: calc(15px * var(--scale-factor));
-            background-color: #ec4899; /* Pink color for hearts */
-            border-radius: 50% 50% 0 0; /* Top curves of the heart */
-            transform: rotate(-45deg); /* Rotate to form heart shape */
-            animation: floatUp 10s infinite linear; /* Floating animation */
+            bottom: -20px; /* Start below the screen */
+            font-size: 10px; /* Smaller hearts */
+            color: rgba(244, 63, 94, 0.6); /* Semi-transparent rose color */
+            animation: floatUp 10s linear infinite;
             opacity: 0; /* Start invisible */
-        }
-        /* Using pseudo-elements to complete the heart shape */
-        .heart-particle::before,
-        .heart-particle::after {
-            content: '';
-            position: absolute;
-            width: calc(15px * var(--scale-factor));
-            height: calc(15px * var(--scale-factor));
-            background-color: #ec4899; /* Match heart color */
-            border-radius: 50%; /* Circular shape for lobes */
-        }
-        .heart-particle::before {
-            top: calc(-7.5px * var(--scale-factor)); /* Position left lobe */
-            left: 0;
-        }
-        .heart-particle::after {
-            top: 0;
-            left: calc(7.5px * var(--scale-factor)); /* Position right lobe */
-        }
-        /* Keyframes for the floating heart animation */
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(-45deg); opacity: 0; } /* Start at bottom, invisible */
-            10%, 90% { opacity: 0.8; } /* Fade in and stay visible */
-            100% { transform: translateY(-10vh) rotate(-45deg); opacity: 0; } /* Float off the top, fade out */
+            /* Use Font Awesome heart */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            content: '\f004'; /* Unicode for solid heart */
         }
 
-        /* --- Static Heart Beat Animation (for the emoji heart) --- */
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); } /* Pulse bigger */
-            100% { transform: scale(1); } /* Return to normal size */
-        }
-        .heart-icon {
-            animation: heartbeat 1.5s ease-in-out infinite; /* Apply heartbeat animation */
-            display: inline-block; /* Needed for transform */
+        /* Animation for floating hearts */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10%, 90% {
+                opacity: 0.7; /* Fade in and stay visible */
+            }
+            100% {
+                transform: translateY(-100vh) translateX(var(--drift, 0px)) rotate(360deg); /* Float up and slightly drift */
+                opacity: 0; /* Fade out at the top */
+            }
         }
     </style>
 </head>
-<body class="bg-black min-h-screen flex items-center justify-center p-4 md:p-6 relative">
+<body class="flex items-center justify-center min-h-screen p-6">
+
     <div class="particle-container" id="particle-container"></div>
 
-    <div class="bg-gray-900 rounded-xl shadow-2xl shadow-pink-900/50 overflow-hidden max-w-4xl w-full flex flex-col md:flex-row z-10 relative max-h-[90vh] scale-90 origin-center">
-
-        <div class="md:w-3/5 relative group h-64 md:h-80">
-             <img src="image_95bf92.jpg" alt="Image for the person the poem is for"
-                 onerror="this.onerror=null; this.src='https://placehold.co/600x400/831843/e5e7eb?text=Image+Not+Found';"
-                 class="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-105">
-            <div class="absolute inset-0 bg-pink-600 opacity-0 group-hover:opacity-30 transition-opacity duration-500"></div>
+    <div class="poem-container max-w-2xl w-full p-8 md:p-12 rounded-lg shadow-lg text-center">
+        <div class="mb-6"> <i class="fas fa-heart heart-icon text-4xl mb-4"></i>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
+            <p class="text-lg text-gray-600 mt-2">A Valentine's Poem</p>
         </div>
 
-        <div class="md:w-2/5 p-6 md:p-10 flex flex-col justify-center relative overflow-y-auto md:flex-grow">
-            <div class="absolute top-4 right-4 text-pink-500 text-3xl heart-icon">
-                ❤️
-            </div>
-
-            <h1 class="text-3xl md:text-4xl font-bold text-pink-300 mb-4 text-center md:text-left">To My Dearest</h1>
-
-            <div class="text-lg md:text-xl text-gray-100 leading-relaxed space-y-4">
-                <p>
-                    Azemar, lord of vector, sum, and line,<br>
-                    Whose handsome angles flawlessly align.<br>
-                    With warm brown skin, a smile that lights the space,<br>
-                    Though student droning dims that tailored grace.<br><br>
-                    Ten thousand floor plans, burdens he assigns,<br>
-                    Ignoring chatter from resentful minds.<br>
-                    He loves the <em>program</em> – clean, precise, and vast,<br>
-                    Unlike the futures these dull learners cast.<br><br>
-                    He renders structures, calculates the fee,<br>
-                    While hopeful homework waits eternally.<br>
-                    His focus fixed on AutoCAD's cold gleam,<br>
-                    A digital, student-less, perfect dream.<br><br>
-                    Oh, Azemar, sharp mind, aesthetic treat,<br>
-                    Make <em>my</em> heart's layout finally complete—<br>
-                    Be my design, my chosen Valentine?
-                </p>
-                <p class="text-right mt-6 text-lg text-pink-400">
-                    With all my love,
-                    <br>
-                    (Your Name)
-                </p>
-            </div>
-
-            <div class="text-center mt-8 text-pink-600 text-sm">
-                ♡ ♡ ♡
-            </div>
+        <div class="mb-8"> <img
+                src="image.png"
+                alt="Valentine Image for Azemar"
+                class="mx-auto w-1/2 max-w-xs rounded-lg border-2 border-pink-300 shadow-md object-cover aspect-square"
+                onerror="this.onerror=null; this.src='https://placehold.co/300x300/ffe4e6/f43f5e?text=Azemar'; this.classList.add('bg-pink-100');"
+                />
         </div>
+
+        <div class="text-left text-gray-700 leading-relaxed space-y-4">
+            <p>
+                Azemar, lord of vector, sum, and line,<br>
+                Whose handsome angles flawlessly align.<br>
+                With warm brown skin, a smile that lights the space,<br>
+                Though student droning dims that tailored grace.
+            </p>
+            <p>
+                Ten thousand floor plans, burdens he assigns,<br>
+                Ignoring chatter from resentful minds.<br>
+                He loves the program – clean, precise, and vast,<br>
+                Unlike the futures these dull learners cast.
+            </p>
+            <p>
+                He renders structures, calculates the fee,<br>
+                While hopeful homework waits eternally.<br>
+                His focus fixed on AutoCAD's cold gleam,<br>
+                A digital, student-less, perfect dream.
+            </p>
+            <p class="font-semibold mt-6">
+                Oh, Azemar, sharp mind, aesthetic treat,<br>
+                Make my heart's layout finally complete—<br>
+                Be my design, my chosen Valentine?
+            </p>
+        </div>
+
+        <footer class="mt-10 text-sm text-gray-500">
+            Happy Valentine's Day!
+        </footer>
     </div>
 
     <script>
-        // JavaScript to create and animate floating heart particles
+        // JavaScript for creating floating heart particles
         const particleContainer = document.getElementById('particle-container');
-        const numberOfParticles = 30; // Number of hearts to generate
+        const numberOfParticles = 30; // Adjust density of hearts
 
-        for (let i = 0; i < numberOfParticles; i++) {
+        function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('heart-particle');
-            // Random horizontal position
-            particle.style.left = `${Math.random() * 100}%`;
-            // Random animation duration and delay for variety
+            // Use Font Awesome solid heart character
+            particle.innerHTML = '&#xf004;'; // Unicode for fas fa-heart
+
+            // Randomize starting position, size, animation duration, and delay
+            const startX = Math.random() * 100; // Percentage across the width
+            const size = Math.random() * 10 + 8; // Size between 8px and 18px
             const duration = Math.random() * 5 + 8; // Duration between 8s and 13s
             const delay = Math.random() * 10; // Delay up to 10s
+            const drift = (Math.random() - 0.5) * 100; // Horizontal drift +/- 50px
+
+            particle.style.left = `${startX}%`;
+            particle.style.fontSize = `${size}px`;
             particle.style.animationDuration = `${duration}s`;
             particle.style.animationDelay = `${delay}s`;
-            // Random size for hearts
-            const scale = Math.random() * 0.5 + 0.7; // Scale between 0.7 and 1.2
-            particle.style.setProperty('--scale-factor', scale); // Set CSS variable for size
-            particleContainer.appendChild(particle); // Add the particle to the container
+            // Set custom property for drift within animation
+            particle.style.setProperty('--drift', `${drift}px`);
+
+
+            particleContainer.appendChild(particle);
+
+            // Remove particle from DOM after animation finishes to prevent buildup
+            particle.addEventListener('animationend', () => {
+                particle.remove();
+                // Create a new particle to replace the one that finished
+                createParticle();
+            });
+        }
+
+        // Create initial set of particles, staggered
+        for (let i = 0; i < numberOfParticles; i++) {
+            setTimeout(createParticle, Math.random() * 5000);
         }
     </script>
 
