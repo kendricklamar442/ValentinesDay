@@ -9,90 +9,101 @@
     <style>
         /* Custom styles for Valentine's theme */
         body {
-            font-family: 'Inter', sans-serif; /* Tailwind default font */
-            background: linear-gradient(135deg, #fff1f2, #ffe4e6); /* Soft pink gradient */
-            /* removed overflow: hidden; */
-            position: relative; /* Needed for absolute positioning of particles */
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+            position: relative;
             min-height: 100vh;
-            /* Ensure flex container takes full height */
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem; /* Replaced p-6 class with explicit padding */
+            padding: 1.5rem;
         }
         .poem-container {
-            background-color: rgba(255, 255, 255, 0.85); /* Slightly less transparent white background */
-            backdrop-filter: blur(10px); /* Blur effect for the background */
-            border: 1px solid rgba(255, 192, 203, 0.5); /* Light pink border */
-            position: relative; /* Ensure it's above the particles */
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 192, 203, 0.5);
+            position: relative;
             z-index: 10;
-            /* Subtle glow effect */
-            box-shadow: 0 0 25px rgba(255, 105, 180, 0.4); /* Pink glow */
-            /* Added vertical scroll and max height */
-            overflow-y: auto; /* Allow vertical scroll if content overflows */
-            max-height: 90vh; /* Max height relative to viewport height */
-            /* Ensure padding is applied correctly */
-            padding: 2rem; /* Default padding (p-8) */
+            box-shadow: 0 0 25px rgba(255, 105, 180, 0.4);
+            overflow-y: auto; /* Allow vertical scroll */
+            max-height: 90vh; /* Max height */
+            padding: 2rem;
         }
-        /* Apply larger padding on medium screens and up */
         @media (min-width: 768px) {
-            .poem-container {
-                padding: 3rem; /* md:p-12 */
-            }
+            .poem-container { padding: 3rem; }
         }
 
         .heart-icon {
-            color: #f43f5e; /* Rose color for heart */
-            /* Subtle text glow for the main heart */
+            color: #f43f5e;
             filter: drop-shadow(0 0 5px rgba(244, 63, 94, 0.5));
         }
-        /* Add subtle animation to the main heart */
-        .heart-icon:hover {
-            animation: pulse 1s infinite;
-        }
+        .heart-icon:hover { animation: pulse 1s infinite; }
         @keyframes pulse {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.1); }
         }
 
-        /* Styles for floating heart particles */
+        /* Particle styles */
         .particle-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden; /* Keep particles contained */
-            z-index: 1; /* Behind the poem container */
-            pointer-events: none; /* Allow clicks to pass through */
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; z-index: 1; pointer-events: none;
         }
         .heart-particle {
-            position: absolute;
-            bottom: -20px; /* Start below the screen */
-            font-size: 10px; /* Smaller hearts */
-            color: rgba(244, 63, 94, 0.6); /* Semi-transparent rose color */
-            animation: floatUp 10s linear infinite;
-            opacity: 0; /* Start invisible */
-            /* Use Font Awesome heart */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            content: '\f004'; /* Unicode for solid heart */
+            position: absolute; bottom: -20px; font-size: 10px;
+            color: rgba(244, 63, 94, 0.6); animation: floatUp 10s linear infinite;
+            opacity: 0; font-family: 'Font Awesome 6 Free'; font-weight: 900; content: '\f004';
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+            10%, 90% { opacity: 0.7; }
+            100% { transform: translateY(-110vh) translateX(var(--drift, 0px)) rotate(360deg); opacity: 0; }
         }
 
-        /* Animation for floating hearts */
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10%, 90% {
-                opacity: 0.7; /* Fade in and stay visible */
-            }
-            100% {
-                transform: translateY(-110vh) translateX(var(--drift, 0px)) rotate(360deg); /* Float further up to ensure they leave screen */
-                opacity: 0; /* Fade out at the top */
-            }
+        /* Button Styles */
+        .valentine-button {
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+        .valentine-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Dark overlay */
+            backdrop-filter: blur(5px); /* Blur background */
+            z-index: 40; /* Above poem container, below popup */
+            display: flex; align-items: center; justify-content: center;
+        }
+        .popup-box {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 50; /* Above overlay */
+            border: 2px solid #f43f5e; /* Pink border */
+            max-width: 90%;
+            width: 350px; /* Fixed width for popup */
+        }
+        .popup-box p {
+            color: #374151; /* gray-700 */
+            margin-bottom: 1.5rem; /* mb-6 */
+            font-size: 1.125rem; /* text-lg */
+        }
+        .popup-close-button {
+             background-color: #f43f5e; /* Rose color */
+             color: white;
+             padding: 0.5rem 1rem; /* py-2 px-4 */
+             border-radius: 0.375rem; /* rounded-md */
+             transition: background-color 0.2s ease;
+        }
+         .popup-close-button:hover {
+              background-color: #be123c; /* Darker rose */
+         }
+
     </style>
 </head>
 <body>
@@ -101,43 +112,34 @@
 
     <div class="poem-container max-w-2xl w-full rounded-lg shadow-lg text-center">
         <div class="mb-6">
-             <i class="fas fa-heart heart-icon text-4xl mb-4 inline-block"></i> <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
+             <i class="fas fa-heart heart-icon text-4xl mb-4 inline-block"></i>
+             <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
             <p class="text-lg text-gray-600 mt-2">A Valentine's Poem</p>
         </div>
 
         <div class="mb-8">
-            <img
-                src="image.png"
-                alt="Valentine Image for Azemar"
-                class="mx-auto w-1/2 max-w-xs rounded-lg border-2 border-pink-300 shadow-md object-cover aspect-square"
-                onerror="this.onerror=null; this.src='https://placehold.co/300x300/ffe4e6/f43f5e?text=Azemar'; this.classList.add('bg-pink-100');"
-            />
+            <img src="image.png" alt="Valentine Image for Azemar" class="mx-auto w-1/2 max-w-xs rounded-lg border-2 border-pink-300 shadow-md object-cover aspect-square" onerror="this.onerror=null; this.src='https://placehold.co/300x300/ffe4e6/f43f5e?text=Azemar'; this.classList.add('bg-pink-100');"/>
         </div>
 
         <div class="text-left text-gray-700 leading-relaxed space-y-4">
-            <p>
-                Azemar, lord of vector, sum, and line,<br>
-                Whose handsome angles flawlessly align.<br>
-                With warm brown skin, a smile that lights the space,<br>
-                Though student droning dims that tailored grace.
-            </p>
-            <p>
-                Ten thousand floor plans, burdens he assigns,<br>
-                Ignoring chatter from resentful minds.<br>
-                He loves the program – clean, precise, and vast,<br>
-                Unlike the futures these dull learners cast.
-            </p>
-            <p>
-                He renders structures, calculates the fee,<br>
-                While hopeful homework waits eternally.<br>
-                His focus fixed on AutoCAD's cold gleam,<br>
-                A digital, student-less, perfect dream.
-            </p>
-            <p class="font-semibold mt-6">
-                Oh, Azemar, sharp mind, aesthetic treat,<br>
-                Make my heart's layout finally complete—<br>
-                Be my design, my chosen Valentine?
-            </p>
+            <p>Azemar, lord of vector, sum, and line,<br>Whose handsome angles flawlessly align.<br>With warm brown skin, a smile that lights the space,<br>Though student droning dims that tailored grace.</p>
+            <p>Ten thousand floor plans, burdens he assigns,<br>Ignoring chatter from resentful minds.<br>He loves the program – clean, precise, and vast,<br>Unlike the futures these dull learners cast.</p>
+            <p>He renders structures, calculates the fee,<br>While hopeful homework waits eternally.<br>His focus fixed on AutoCAD's cold gleam,<br>A digital, student-less, perfect dream.</p>
+            <p class="font-semibold mt-6">Oh, Azemar, sharp mind, aesthetic treat,<br>Make my heart's layout finally complete—<br>Be my design, my chosen Valentine?</p>
+        </div>
+
+        <div id="buttonArea" class="mt-8 text-center">
+            <button id="yesButton" class="valentine-button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg mx-2">
+                Yes <i class="fas fa-check ml-1"></i>
+            </button>
+            <button id="noButton" class="valentine-button bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg mx-2">
+                No <i class="fas fa-times ml-1"></i>
+            </button>
+        </div>
+
+        <div id="yesResponse" class="hidden mt-8 text-center p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
+            <p class="font-semibold text-lg">Wonderful! Call me maybe?</p>
+            <p class="text-xl font-bold mt-2">(305) 253-2211</p>
         </div>
 
         <footer class="mt-10 text-sm text-gray-500">
@@ -145,46 +147,73 @@
         </footer>
     </div>
 
-    <script>
-        // JavaScript for creating floating heart particles
-        const particleContainer = document.getElementById('particle-container');
-        const numberOfParticles = 30; // Adjust density of hearts
+    <div id="noPopup" class="popup-overlay hidden"> <div class="popup-box">
+            <p>Stop lying. Be my valentine!</p>
+            <button id="closePopupButton" class="popup-close-button">Okay <i class="fas fa-heart ml-1"></i></button>
+        </div>
+    </div>
 
+    <script>
+        // Particle Generation Script (no changes needed here)
+        const particleContainer = document.getElementById('particle-container');
+        const numberOfParticles = 30;
         function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('heart-particle');
-            // Use Font Awesome solid heart character
-            particle.innerHTML = '&#xf004;'; // Unicode for fas fa-heart
-
-            // Randomize starting position, size, animation duration, and delay
-            const startX = Math.random() * 100; // Percentage across the width
-            const size = Math.random() * 10 + 8; // Size between 8px and 18px
-            const duration = Math.random() * 5 + 8; // Duration between 8s and 13s
-            const delay = Math.random() * 10; // Delay up to 10s
-            const drift = (Math.random() - 0.5) * 100; // Horizontal drift +/- 50px
-
+            particle.innerHTML = '&#xf004;';
+            const startX = Math.random() * 100;
+            const size = Math.random() * 10 + 8;
+            const duration = Math.random() * 5 + 8;
+            const delay = Math.random() * 10;
+            const drift = (Math.random() - 0.5) * 100;
             particle.style.left = `${startX}%`;
             particle.style.fontSize = `${size}px`;
             particle.style.animationDuration = `${duration}s`;
             particle.style.animationDelay = `${delay}s`;
-            // Set custom property for drift within animation
             particle.style.setProperty('--drift', `${drift}px`);
-
-
             particleContainer.appendChild(particle);
-
-            // Remove particle from DOM after animation finishes to prevent buildup
-             // And create a new one to maintain density
             particle.addEventListener('animationend', () => {
                 particle.remove();
-                createParticle(); // Create a new one when one finishes
+                createParticle();
             });
         }
-
-        // Create initial set of particles, staggered
         for (let i = 0; i < numberOfParticles; i++) {
-            setTimeout(createParticle, Math.random() * 5000); // Stagger initial creation
+            setTimeout(createParticle, Math.random() * 5000);
         }
+
+        // Button Interaction Logic
+        const yesButton = document.getElementById('yesButton');
+        const noButton = document.getElementById('noButton');
+        const buttonArea = document.getElementById('buttonArea');
+        const yesResponse = document.getElementById('yesResponse');
+        const noPopup = document.getElementById('noPopup');
+        const closePopupButton = document.getElementById('closePopupButton');
+
+        // Event listener for YES button
+        yesButton.addEventListener('click', () => {
+            // Hide the button area
+            buttonArea.classList.add('hidden');
+            // Show the 'Yes' response message
+            yesResponse.classList.remove('hidden');
+            yesResponse.classList.add('block'); // Or 'flex' if needed for alignment
+        });
+
+        // Event listener for NO button
+        noButton.addEventListener('click', () => {
+            // Show the popup
+            noPopup.classList.remove('hidden');
+            noPopup.classList.add('flex'); // Use flex to center the popup box
+            // Hide the 'No' button itself
+            noButton.classList.add('hidden');
+        });
+
+        // Event listener for closing the popup
+        closePopupButton.addEventListener('click', () => {
+            // Hide the popup
+            noPopup.classList.add('hidden');
+            noPopup.classList.remove('flex');
+        });
+
     </script>
 
 </body>
