@@ -17,6 +17,7 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
+            overflow-x: hidden; /* Prevent horizontal scroll during animation */
         }
         .poem-container {
             background-color: rgba(255, 255, 255, 0.85);
@@ -28,6 +29,8 @@
             overflow-y: auto; /* Allow vertical scroll */
             max-height: 90vh; /* Max height */
             padding: 2rem;
+            opacity: 0; /* Start hidden for animation */
+            transform: translateY(20px); /* Start slightly lower for animation */
         }
         @media (min-width: 768px) {
             .poem-container { padding: 3rem; }
@@ -76,6 +79,13 @@
             backdrop-filter: blur(5px); /* Blur background */
             z-index: 40; /* Above poem container, below popup */
             display: flex; align-items: center; justify-content: center;
+            opacity: 0; /* Start hidden for fade-in */
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Prevent interaction when hidden */
+        }
+        .popup-overlay.visible {
+            opacity: 1;
+            pointer-events: auto; /* Allow interaction when visible */
         }
         .popup-box {
             background-color: white;
@@ -87,6 +97,13 @@
             border: 2px solid #f43f5e; /* Pink border */
             max-width: 90%;
             width: 350px; /* Fixed width for popup */
+            transform: scale(0.95); /* Start slightly smaller */
+            opacity: 0; /* Start hidden */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .popup-overlay.visible .popup-box {
+             transform: scale(1); /* Scale to normal size */
+             opacity: 1; /* Fade in */
         }
         .popup-box p {
             color: #374151; /* gray-700 */
@@ -104,31 +121,58 @@
               background-color: #be123c; /* Darker rose */
          }
 
+        /* --- Subtle Animation Styles --- */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Classes to trigger animations */
+        .animate-container-load {
+            animation: fadeInUp 0.8s ease-out 0.2s forwards; /* Delay slightly */
+        }
+        .animate-fade-in {
+            opacity: 0; /* Start hidden */
+            animation: fadeIn 0.6s ease-in forwards;
+        }
+        .poem-paragraph {
+             opacity: 0; /* Start hidden */
+             transform: translateY(10px); /* Start slightly lower */
+        }
+        .animate-paragraph {
+             animation: fadeInUp 0.5s ease-out forwards;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="particle-container" id="particle-container"></div>
 
-    <div class="poem-container max-w-2xl w-full rounded-lg shadow-lg text-center">
-        <div class="mb-6">
+    <div id="poemContainer" class="poem-container max-w-2xl w-full rounded-lg shadow-lg text-center">
+        <div class="mb-6 animate-fade-in" style="animation-delay: 0.5s;">
              <i class="fas fa-heart heart-icon text-4xl mb-4 inline-block"></i>
              <h1 class="text-3xl md:text-4xl font-bold text-gray-800">To Azemar</h1>
             <p class="text-lg text-gray-600 mt-2">A Valentine's Poem</p>
         </div>
 
-        <div class="mb-8">
+        <div class="mb-8 animate-fade-in" style="animation-delay: 0.7s;">
             <img src="image.png" alt="Valentine Image for Azemar" class="mx-auto w-1/2 max-w-xs rounded-lg border-2 border-pink-300 shadow-md object-cover aspect-square" onerror="this.onerror=null; this.src='https://placehold.co/300x300/ffe4e6/f43f5e?text=Azemar'; this.classList.add('bg-pink-100');"/>
         </div>
 
         <div class="text-left text-gray-700 leading-relaxed space-y-4">
-            <p>Azemar, lord of vector, sum, and line,<br>Whose handsome angles flawlessly align.<br>With warm brown skin, a smile that lights the space,<br>Though student droning dims that tailored grace.</p>
-            <p>Ten thousand floor plans, burdens he assigns,<br>Ignoring chatter from resentful minds.<br>He loves the program – clean, precise, and vast,<br>Unlike the futures these dull learners cast.</p>
-            <p>He renders structures, calculates the fee,<br>While hopeful homework waits eternally.<br>His focus fixed on AutoCAD's cold gleam,<br>A digital, student-less, perfect dream.</p>
-            <p class="font-semibold mt-6">Oh, Azemar, sharp mind, aesthetic treat,<br>Make my heart's layout finally complete—<br>Be my design, my chosen Valentine?</p>
+            <p class="poem-paragraph">Azemar, lord of vector, sum, and line,<br>Whose handsome angles flawlessly align.<br>With warm brown skin, a smile that lights the space,<br>Though student droning dims that tailored grace.</p>
+            <p class="poem-paragraph">Ten thousand floor plans, burdens he assigns,<br>Ignoring chatter from resentful minds.<br>He loves the program – clean, precise, and vast,<br>Unlike the futures these dull learners cast.</p>
+            <p class="poem-paragraph">He renders structures, calculates the fee,<br>While hopeful homework waits eternally.<br>His focus fixed on AutoCAD's cold gleam,<br>A digital, student-less, perfect dream.</p>
+            <p class="font-semibold mt-6 poem-paragraph">Oh, Azemar, sharp mind, aesthetic treat,<br>Make my heart's layout finally complete—<br>Be my design, my chosen Valentine?</p>
         </div>
 
-        <div id="buttonArea" class="mt-8 text-center">
+        <div id="buttonArea" class="mt-8 text-center animate-fade-in" style="animation-delay: 1.7s;">
             <button id="yesButton" class="valentine-button bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg mx-2">
                 Yes <i class="fas fa-check ml-1"></i>
             </button>
@@ -142,46 +186,74 @@
             <p class="text-xl font-bold mt-2">(305) 253-2211</p>
         </div>
 
-        <footer class="mt-10 text-sm text-gray-500">
+        <footer class="mt-10 text-sm text-gray-500 animate-fade-in" style="animation-delay: 1.9s;">
             Happy Valentine's Day!
         </footer>
     </div>
 
-    <div id="noPopup" class="popup-overlay hidden"> <div class="popup-box">
+    <div id="noPopup" class="popup-overlay hidden">
+         <div class="popup-box">
             <p>Stop lying. Be my valentine!</p>
             <button id="closePopupButton" class="popup-close-button">Okay <i class="fas fa-heart ml-1"></i></button>
         </div>
     </div>
 
     <script>
-        // Particle Generation Script (no changes needed here)
+        // --- Animation Trigger Script ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const poemContainer = document.getElementById('poemContainer');
+            const paragraphs = document.querySelectorAll('.poem-paragraph');
+
+            // Trigger container animation
+            poemContainer.classList.add('animate-container-load');
+
+            // Stagger paragraph animations
+            let delay = 0.9; // Start delay after container animation begins
+            paragraphs.forEach((p) => {
+                p.style.animationDelay = `${delay}s`;
+                p.classList.add('animate-paragraph');
+                delay += 0.2; // Increment delay for next paragraph
+            });
+
+            // Note: Other elements like title, image, buttons use inline style animation-delay
+        });
+
+
+        // --- Particle Generation Script (no changes needed here) ---
         const particleContainer = document.getElementById('particle-container');
         const numberOfParticles = 30;
         function createParticle() {
             const particle = document.createElement('div');
             particle.classList.add('heart-particle');
-            particle.innerHTML = '&#xf004;';
+            particle.innerHTML = '&#xf004;'; // Font Awesome heart icon unicode
             const startX = Math.random() * 100;
             const size = Math.random() * 10 + 8;
-            const duration = Math.random() * 5 + 8;
-            const delay = Math.random() * 10;
-            const drift = (Math.random() - 0.5) * 100;
+            const duration = Math.random() * 5 + 8; // Random duration between 8-13 seconds
+            const delay = Math.random() * 10; // Random start delay up to 10 seconds
+            const drift = (Math.random() - 0.5) * 100; // Random horizontal drift
+
             particle.style.left = `${startX}%`;
             particle.style.fontSize = `${size}px`;
             particle.style.animationDuration = `${duration}s`;
             particle.style.animationDelay = `${delay}s`;
             particle.style.setProperty('--drift', `${drift}px`);
+
             particleContainer.appendChild(particle);
+
+            // Remove particle after animation ends and create a new one
             particle.addEventListener('animationend', () => {
                 particle.remove();
-                createParticle();
+                createParticle(); // Recursively create new particles
             });
         }
+        // Initial particle creation loop
         for (let i = 0; i < numberOfParticles; i++) {
+            // Stagger the initial creation slightly
             setTimeout(createParticle, Math.random() * 5000);
         }
 
-        // Button Interaction Logic
+
+        // --- Button Interaction Logic ---
         const yesButton = document.getElementById('yesButton');
         const noButton = document.getElementById('noButton');
         const buttonArea = document.getElementById('buttonArea');
@@ -191,27 +263,27 @@
 
         // Event listener for YES button
         yesButton.addEventListener('click', () => {
-            // Hide the button area
             buttonArea.classList.add('hidden');
-            // Show the 'Yes' response message
             yesResponse.classList.remove('hidden');
-            yesResponse.classList.add('block'); // Or 'flex' if needed for alignment
+            yesResponse.classList.add('block', 'animate-fade-in'); // Add fade-in on show
         });
 
         // Event listener for NO button
         noButton.addEventListener('click', () => {
-            // Show the popup
             noPopup.classList.remove('hidden');
-            noPopup.classList.add('flex'); // Use flex to center the popup box
-            // Hide the 'No' button itself
-            noButton.classList.add('hidden');
+            noPopup.classList.add('visible'); // Use visibility class for animation
+            // Optionally hide the 'No' button or the whole button area
+            // buttonArea.classList.add('hidden'); // Hides both buttons
+            noButton.classList.add('hidden'); // Hides just the 'No' button
         });
 
         // Event listener for closing the popup
         closePopupButton.addEventListener('click', () => {
-            // Hide the popup
-            noPopup.classList.add('hidden');
-            noPopup.classList.remove('flex');
+            noPopup.classList.remove('visible');
+            // Wait for fade-out transition before hiding completely
+            setTimeout(() => {
+                noPopup.classList.add('hidden');
+            }, 300); // Match CSS transition duration
         });
 
     </script>
